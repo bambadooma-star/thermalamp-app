@@ -3,27 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ThermalAmp ⚡🔥 | Real-Time Android Battery & Thermal Telemetry</title>
-    <meta name="description" content="Production-grade Android utility for real-time temperature, instantaneous current (mA), real wattage (W), remaining mAh, and segregated Idle vs Discharge telemetry with floating screen overlay.">
+    <title>ThermalAmp ⚡🔥 | Lightweight Battery & Thermal Telemetry</title>
+    <meta name="description" content="Lightweight, fast, real-time Android hardware battery, power (W), temperature, and screen-off drain rate monitor.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-dark: #070B12;
-            --bg-card: rgba(18, 24, 38, 0.7);
-            --border-card: rgba(255, 255, 255, 0.08);
-            --cyan: #00E5FF;
-            --cyan-glow: rgba(0, 229, 255, 0.25);
-            --orange: #FF7043;
-            --amber: #F59E0B;
-            --green: #10B981;
-            --blue: #60A5FA;
-            --red: #FF5252;
-            --text-main: #F8FAFC;
-            --text-muted: #94A3B8;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -32,674 +17,337 @@
 
         body {
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        /* Ambient Glow Backgrounds */
-        .glow-1 {
-            position: absolute;
-            top: -10%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 800px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(0, 229, 255, 0.12) 0%, rgba(255, 112, 67, 0.05) 50%, transparent 80%);
-            filter: blur(100px);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .glow-2 {
-            position: absolute;
-            top: 40%;
-            left: -10%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
-            filter: blur(120px);
-            z-index: 0;
-            pointer-events: none;
+            background-color: #080C14;
+            color: #F1F5F9;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 860px;
             margin: 0 auto;
-            padding: 0 24px;
-            position: relative;
-            z-index: 1;
+            padding: 0 20px;
         }
 
-        /* Navigation */
+        /* Clean Minimal Nav */
         nav {
-            padding: 24px 0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 20px 0;
+            border-bottom: 1px solid #141C2C;
         }
 
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .logo {
+            font-size: 19px;
             font-weight: 800;
-            font-size: 22px;
             color: #FFF;
             text-decoration: none;
-            letter-spacing: -0.5px;
-        }
-
-        .brand span {
-            background: linear-gradient(135deg, var(--cyan), #38BDF8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nav-links {
             display: flex;
             align-items: center;
-            gap: 28px;
+            gap: 8px;
         }
 
-        .nav-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: #FFF;
+        .logo span {
+            color: #00E5FF;
         }
 
         .nav-btn {
-            background: rgba(0, 229, 255, 0.1);
-            color: var(--cyan);
-            border: 1px solid rgba(0, 229, 255, 0.3);
-            padding: 8px 18px;
-            border-radius: 99px;
+            background: #00E5FF;
+            color: #030814;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 7px 16px;
+            border-radius: 8px;
             text-decoration: none;
-            font-size: 13.5px;
-            font-weight: 600;
-            transition: all 0.2s;
+            transition: opacity 0.2s;
         }
 
         .nav-btn:hover {
-            background: var(--cyan);
-            color: #000;
-            box-shadow: 0 0 20px var(--cyan-glow);
+            opacity: 0.9;
         }
 
-        /* Hero Section */
+        /* Hero */
         .hero {
-            padding: 80px 0 60px;
+            padding: 50px 0 35px;
             text-align: center;
         }
 
-        .pill-badge {
+        .badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 6px 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 6px;
+            padding: 4px 12px;
+            background: #0E1626;
+            border: 1px solid #1E293B;
             border-radius: 99px;
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 600;
-            color: var(--cyan);
-            margin-bottom: 24px;
+            color: #00E5FF;
+            margin-bottom: 18px;
         }
 
-        .pill-badge .dot {
-            width: 8px;
-            height: 8px;
+        .badge .dot {
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            background: var(--green);
-            box-shadow: 0 0 10px var(--green);
+            background: #10B981;
         }
 
         h1 {
-            font-size: 56px;
+            font-size: 40px;
             font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -1.5px;
-            margin-bottom: 20px;
-            max-width: 900px;
-            margin-left: auto;
-            margin-right: auto;
+            letter-spacing: -1px;
+            line-height: 1.2;
+            margin-bottom: 14px;
+            color: #FFF;
         }
 
-        h1 .highlight-cyan {
-            background: linear-gradient(135deg, #FFF, var(--cyan));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        h1 span {
+            color: #00E5FF;
         }
 
-        h1 .highlight-orange {
-            background: linear-gradient(135deg, #FF9E80, var(--orange));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .hero-p {
+            font-size: 16px;
+            color: #94A3B8;
+            max-width: 580px;
+            margin: 0 auto 28px;
         }
 
-        .hero-desc {
-            font-size: 18px;
-            color: var(--text-muted);
-            max-width: 680px;
-            margin: 0 auto 36px;
-            font-weight: 400;
-        }
-
-        .hero-actions {
+        .cta-group {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 16px;
+            gap: 12px;
             flex-wrap: wrap;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
         }
 
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 16px 36px;
-            background: linear-gradient(135deg, var(--cyan), #0284C7);
-            color: #030816;
-            font-size: 16px;
-            font-weight: 700;
-            border-radius: 14px;
-            text-decoration: none;
-            box-shadow: 0 8px 30px var(--cyan-glow);
-            transition: all 0.25s;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(0, 229, 255, 0.45);
-        }
-
-        .btn-secondary {
+        .btn-dl {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 16px 28px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: #FFF;
+            padding: 13px 28px;
+            background: #00E5FF;
+            color: #030814;
             font-size: 15px;
-            font-weight: 600;
-            border-radius: 14px;
+            font-weight: 700;
+            border-radius: 10px;
             text-decoration: none;
-            transition: all 0.25s;
+            transition: transform 0.15s;
         }
 
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.25);
+        .btn-dl:hover {
+            transform: translateY(-1px);
         }
 
-        /* Mockup & Live Stats Display */
-        .showcase-wrapper {
-            margin: 40px auto 70px;
-            max-width: 960px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-card);
-            border-radius: 28px;
-            padding: 32px;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
-            display: grid;
-            grid-template-columns: 1fr 1.1fr;
-            gap: 32px;
+        .btn-gh {
+            display: inline-flex;
             align-items: center;
+            gap: 8px;
+            padding: 13px 22px;
+            background: #101726;
+            border: 1px solid #1E293B;
+            color: #F1F5F9;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: border-color 0.15s;
         }
 
-        .device-preview {
-            text-align: center;
-            border-radius: 20px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .btn-gh:hover {
+            border-color: #334155;
+        }
+
+        /* Clean Phone Preview */
+        .preview-box {
+            max-width: 380px;
+            margin: 0 auto 50px;
             background: #000;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8);
+            border-radius: 24px;
+            border: 2px solid #1A2333;
+            overflow: hidden;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
         }
 
-        .device-preview img {
+        .preview-box img {
             width: 100%;
-            height: auto;
             display: block;
         }
 
-        .stats-highlight {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
-            padding: 16px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .stat-label {
-            font-size: 13px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .stat-val {
-            font-size: 20px;
-            font-weight: 800;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Features Grid */
-        .features {
-            padding: 80px 0;
-        }
-
-        .section-header {
-            text-align: center;
+        /* 4 Simple Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
             margin-bottom: 50px;
         }
 
-        .section-tag {
-            font-size: 12.5px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 700;
-            color: var(--cyan);
+        .f-card {
+            background: #0D131F;
+            border: 1px solid #172133;
+            border-radius: 14px;
+            padding: 18px 20px;
+        }
+
+        .f-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             margin-bottom: 8px;
         }
 
-        .section-title {
-            font-size: 38px;
-            font-weight: 800;
-            letter-spacing: -1px;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
-        }
-
-        .feature-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-card);
-            border-radius: 20px;
-            padding: 28px;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(0, 229, 255, 0.3);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            margin-bottom: 18px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .feature-card h3 {
+        .f-icon {
             font-size: 18px;
+        }
+
+        .f-card h3 {
+            font-size: 15px;
             font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .feature-card p {
-            font-size: 14px;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        /* Idle vs Discharge Callout Card */
-        .callout-card {
-            background: linear-gradient(135deg, rgba(96, 165, 250, 0.08), rgba(245, 158, 11, 0.08));
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 24px;
-            padding: 36px;
-            margin: 40px 0;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 32px;
-        }
-
-        .callout-side {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
-            padding: 24px;
-        }
-
-        .callout-side h4 {
-            font-size: 18px;
-            font-weight: 800;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .callout-side p {
-            font-size: 13.5px;
-            color: var(--text-muted);
-            margin-bottom: 16px;
-        }
-
-        .callout-badge {
-            display: inline-block;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        /* Tech Specs Table */
-        .specs-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 24px;
-            background: var(--bg-card);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--border-card);
-        }
-
-        .specs-table th, .specs-table td {
-            padding: 14px 20px;
-            text-align: left;
-            font-size: 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .specs-table th {
-            background: rgba(255, 255, 255, 0.03);
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        .specs-table td:first-child {
-            font-weight: 600;
             color: #FFF;
         }
 
-        /* Installation Code Block */
-        .code-block {
-            background: #000;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 16px 20px;
-            font-family: 'JetBrains Mono', monospace;
+        .f-card p {
             font-size: 13px;
-            color: var(--cyan);
+            color: #8A99AD;
+            line-height: 1.5;
+        }
+
+        /* Quick Install */
+        .install-box {
+            background: #0B101A;
+            border: 1px solid #162032;
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 50px;
+        }
+
+        .install-box h3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #FFF;
+        }
+
+        .install-box p {
+            font-size: 13px;
+            color: #8A99AD;
+            margin-bottom: 12px;
+        }
+
+        .code-row {
+            background: #05080E;
+            border: 1px solid #172236;
+            border-radius: 8px;
+            padding: 12px 14px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12.5px;
+            color: #00E5FF;
             overflow-x: auto;
-            margin-top: 12px;
         }
 
         /* Footer */
         footer {
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding: 40px 0;
+            border-top: 1px solid #121824;
+            padding: 24px 0 35px;
             text-align: center;
-            color: var(--text-muted);
-            font-size: 13.5px;
-            margin-top: 60px;
+            font-size: 12.5px;
+            color: #64748B;
         }
 
         footer a {
-            color: var(--cyan);
+            color: #00E5FF;
             text-decoration: none;
         }
 
-        @media (max-width: 860px) {
-            h1 { font-size: 38px; }
-            .showcase-wrapper { grid-template-columns: 1fr; }
-            .callout-card { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
+        @media (max-width: 640px) {
+            h1 { font-size: 28px; }
+            .features-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <div class="glow-1"></div>
-    <div class="glow-2"></div>
-
     <div class="container">
-        <!-- Navigation -->
+        <!-- Minimal Nav -->
         <nav>
-            <a href="#" class="brand">
-                ThermalAmp <span>⚡🔥</span>
-            </a>
-            <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#telemetry">Idle vs Discharge</a>
-                <a href="#specs">Specs</a>
-                <a href="https://github.com/bambadooma-star/thermalamp" target="_blank">Private Repo</a>
-            </div>
+            <a href="#" class="logo">ThermalAmp <span>⚡🔥</span></a>
             <a href="ThermalAmp.apk" class="nav-btn" download>Download APK</a>
         </nav>
 
-        <!-- Hero Section -->
+        <!-- Fast, Clear Hero -->
         <section class="hero">
-            <div class="pill-badge">
-                <span class="dot"></span>
-                ThermalAmp v1.0.0 Production Release • Android 8.0 to 15
+            <div class="badge">
+                <span class="dot"></span> v1.0.2 • Android 8.0 - 15 • Non-Root
             </div>
             <h1>
-                Hardware-Level <span class="highlight-cyan">Battery, Thermal & Power</span> <span class="highlight-orange">Telemetry.</span>
+                Real Android Battery &amp; <span>Thermal Telemetry.</span>
             </h1>
-            <p class="hero-desc">
-                Real actual thermistor temperature, instantaneous current (mA), real power wattage (W), remaining coulomb capacity (mAh), and segregated Idle vs Active Discharge telemetry with a floating screen HUD.
+            <p class="hero-p">
+                Verified screen-off drain rate (%/h), real thermistor temperature, wattage (W), mA current, and CPU deep sleep tracking.
             </p>
-            <div class="hero-actions">
-                <a href="ThermalAmp.apk" class="btn-primary" download>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                    Download APK (v1.0.0)
+
+            <div class="cta-group">
+                <a href="ThermalAmp.apk" class="btn-dl" download>
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download APK (9.7 MB)
                 </a>
-                <a href="https://github.com/bambadooma-star/thermalamp" class="btn-secondary" target="_blank">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                    Source Code
+                <a href="https://github.com/bambadooma-star/thermalamp" class="btn-gh" target="_blank">
+                    GitHub Source
                 </a>
             </div>
 
-            <!-- Device Showcase -->
-            <div class="showcase-wrapper">
-                <div class="device-preview">
-                    <img src="screenshot.png" alt="ThermalAmp Production Screenshot">
-                </div>
-                <div class="stats-highlight">
-                    <div class="stat-card">
-                        <div>
-                            <div class="stat-label">Real Actual Temperature</div>
-                            <div style="color: #64748B; font-size: 11px;">Hardware thermistor sensor</div>
-                        </div>
-                        <div class="stat-val" style="color: var(--orange);">29.8°C</div>
-                    </div>
-                    <div class="stat-card">
-                        <div>
-                            <div class="stat-label">Power Telemetry (W)</div>
-                            <div style="color: #64748B; font-size: 11px;">$V \times \text{mA} / 1,000,000$</div>
-                        </div>
-                        <div class="stat-val" style="color: var(--green);">+1.71 W</div>
-                    </div>
-                    <div class="stat-card">
-                        <div>
-                            <div class="stat-label">Instantaneous Current</div>
-                            <div style="color: #64748B; font-size: 11px;">BATTERY_PROPERTY_CURRENT_NOW</div>
-                        </div>
-                        <div class="stat-val" style="color: var(--cyan);">+442 mA</div>
-                    </div>
-                    <div class="stat-card">
-                        <div>
-                            <div class="stat-label">Hardware Capacity</div>
-                            <div style="color: #64748B; font-size: 11px;">Coulomb charge counter</div>
-                        </div>
-                        <div class="stat-val" style="color: #FFF;">2,278 / 4,648 mAh</div>
-                    </div>
-                    <div class="stat-card">
-                        <div>
-                            <div class="stat-label">Background CPU Overhead</div>
-                            <div style="color: #64748B; font-size: 11px;">Deep-sleep without wake-locks</div>
-                        </div>
-                        <div class="stat-val" style="color: var(--green);">0.0% CPU</div>
-                    </div>
-                </div>
+            <!-- Clean Screenshot Preview -->
+            <div class="preview-box">
+                <img src="screenshot.png" alt="ThermalAmp App Live Interface">
             </div>
         </section>
 
-        <!-- Idle vs Discharge Callout -->
-        <section id="telemetry">
-            <div class="section-header">
-                <div class="section-tag">Precision Power Breakdown</div>
-                <h2 class="section-title">Idle Standby vs. Active Discharge</h2>
-            </div>
-
-            <div class="callout-card">
-                <div class="callout-side">
-                    <h4 style="color: var(--blue);">
-                        💤 IDLE STANDBY
-                    </h4>
-                    <p>
-                        Monitors quiescent sleep drain when the device is locked, display is turned off, and CPU enters C-states.
-                    </p>
-                    <div style="display: flex; gap: 10px;">
-                        <span class="callout-badge" style="background: rgba(96, 165, 250, 0.15); color: var(--blue);">Typical: ~110 mA</span>
-                        <span class="callout-badge" style="background: rgba(96, 165, 250, 0.15); color: var(--blue);">~0.42 W</span>
-                    </div>
+        <!-- 4 Core Capabilities -->
+        <div class="features-grid">
+            <div class="f-card">
+                <div class="f-card-header">
+                    <span class="f-icon">🌙</span>
+                    <h3>Screen-Off Drain Rate</h3>
                 </div>
-
-                <div class="callout-side">
-                    <h4 style="color: var(--amber);">
-                        🔋 ACTIVE DISCHARGE
-                    </h4>
-                    <p>
-                        Measures real in-use electrical draw during display-on sessions, gaming workloads, video streaming, and high compute tasks.
-                    </p>
-                    <div style="display: flex; gap: 10px;">
-                        <span class="callout-badge" style="background: rgba(245, 158, 11, 0.15); color: var(--amber);">Typical: ~580 mA</span>
-                        <span class="callout-badge" style="background: rgba(245, 158, 11, 0.15); color: var(--amber);">~2.25 W</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Core Features -->
-        <section id="features" class="features">
-            <div class="section-header">
-                <div class="section-tag">Engineering Highlights</div>
-                <h2 class="section-title">Built for Performance & Accuracy</h2>
+                <p>Audited battery loss rate (%/h) during standby. Color-coded alerts with red warning if drain exceeds 2.0%/h.</p>
             </div>
 
-            <div class="grid-3">
-                <div class="feature-card">
-                    <div class="feature-icon">🔥</div>
+            <div class="f-card">
+                <div class="f-card-header">
+                    <span class="f-icon">🔥</span>
                     <h3>Real Physical Temperature</h3>
-                    <p>Bypasses simulated OS indicators to query the actual physical battery thermistor sensor with 0.1°C precision and color-coded risk indicators.</p>
+                    <p>Direct reading of the hardware battery thermistor sensor with 0.1°C precision and high-temperature alarm.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Wattage & Current Telemetry</h3>
-                    <p>Real-time computing of electrical wattage ($W = V \times A$) and instantaneous mA with automatic polarity normalization across Android chipsets.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🪟</div>
-                    <h3>Enhanced Floating Screen HUD</h3>
-                    <p>Dual-row draggable HUD displaying live State, Temp, W, mA on row 1, and calculated Idle/Active usage rates (mA & %/h) plus Deep Sleep duration on row 2.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⏳</div>
-                    <h3>Deep Sleep & Usage Rates</h3>
-                    <p>Precise Deep Sleep time calculation since last reset using CPU uptime vs elapsed realtime, with separate Idle and Active battery drain rates.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔄</div>
-                    <h3>In-App Session Reset</h3>
-                    <p>One-tap session reset with confirmation dialog to clear accumulated Idle/Active averages and start a fresh benchmark tracking window anytime.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔔</div>
-                    <h3>High-Temp Hold Alarm</h3>
-                    <p>Protective thermal alarm that triggers loud ringtones and vibrations only if temperature exceeds your threshold for a continuous hold duration.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🌿</div>
-                    <h3>Zero-Drain Eco Architecture</h3>
-                    <p>Screen-aware adaptive frequency (2s screen-on, 25s screen-off) and SQLite Write-Ahead Logging batching to guarantee 0.0% standby battery drain.</p>
-                </div>
-            </div>
-        </section>
 
-        <!-- Specifications & Quick Setup -->
-        <section id="specs">
-            <div class="section-header">
-                <div class="section-tag">Specifications</div>
-                <h2 class="section-title">Technical Specifications</h2>
-            </div>
-
-            <table class="specs-table">
-                <tr>
-                    <td>Target SDK</td>
-                    <td>Android 15 (API 35)</td>
-                </tr>
-                <tr>
-                    <td>Minimum SDK</td>
-                    <td>Android 8.0 Oreo (API 26)</td>
-                </tr>
-                <tr>
-                    <td>UI Engine</td>
-                    <td>Jetpack Compose 2025 + Material 3</td>
-                </tr>
-                <tr>
-                    <td>Root Requirement</td>
-                    <td>None (100% Non-Root standard APIs)</td>
-                </tr>
-                <tr>
-                    <td>Background Service</td>
-                    <td>Foreground Service (specialUse) + Notification Channel</td>
-                </tr>
-                <tr>
-                    <td>Database</td>
-                    <td>SQLite 3 with Write-Ahead Logging (WAL) & In-Memory Batching</td>
-                </tr>
-            </table>
-
-            <div style="margin-top: 40px; text-align: left;">
-                <h3 style="margin-bottom: 10px;">Quick Install via ADB</h3>
-                <p style="color: var(--text-muted); font-size: 14px;">Connect your phone via USB with USB Debugging enabled, then execute:</p>
-                <div class="code-block">
-adb install -r -d -g ThermalAmp.apk<br>
-adb shell appops set com.thermalamp.app SYSTEM_ALERT_WINDOW allow<br>
-adb shell am start -n com.thermalamp.app/.MainActivity
+            <div class="f-card">
+                <div class="f-card-header">
+                    <span class="f-icon">💡</span>
+                    <h3>Power (Watts) &amp; Current</h3>
+                    <p>Live calculated electrical wattage (V × A) and instantaneous mA with net charging/discharging indicators.</p>
                 </div>
+
+            <div class="f-card">
+                <div class="f-card-header">
+                    <span class="f-icon">⏳</span>
+                    <h3>Deep Sleep &amp; In-App Reset</h3>
+                    <p>Hardware-level CPU C-State sleep duration vs awake time with a one-tap session reset for clean benchmarks.</p>
+                </div>
+        </div>
+
+        <!-- Quick Install -->
+        <div class="install-box">
+            <h3>Quick Install (ADB or Direct)</h3>
+            <p>Download the APK directly to your phone, or install via USB debugging using ADB:</p>
+            <div class="code-row">
+                adb install -r -d -g ThermalAmp.apk
             </div>
-        </section>
+        </div>
 
         <!-- Footer -->
         <footer>
-            <p>ThermalAmp • Built by bambadooma-star • Distributed under Private & Public Licenses.</p>
-            <p style="margin-top: 6px;"><a href="https://github.com/bambadooma-star/thermalamp">GitHub Source</a> • <a href="ThermalAmp.apk" download>Direct APK Download</a></p>
+            ThermalAmp by bambadooma-star • <a href="https://github.com/bambadooma-star/thermalamp-app">Public Repo</a> • <a href="ThermalAmp.apk" download>Direct Download</a>
         </footer>
     </div>
 
